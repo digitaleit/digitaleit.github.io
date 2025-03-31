@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tombola Animata</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #26a69a;
+            --secondary-color: #ffb300;
+            --text-color: #333;
+            --background-color: #f4f4f4;
+            --input-border-color: #ff8a65;
+            --input-focus-color: #f4511e;
+            --box-shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode {
+            --text-color: #eee;
+            --background-color: #121212;
+            --input-border-color: #5e35b1;
+            --input-focus-color: #9c27b0;
+            --box-shadow-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            text-align: center;
+            transition: background-color 0.5s ease;
+            color: var(--text-color);
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-top: 20px;
+            color: var(--secondary-color);
+            text-shadow: 0 0 8px var(--secondary-color);
+        }
+
+        #inputDati {
+            border: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            max-width: 90%;
+            box-shadow: 0 4px 10px var(--box-shadow-color);
+            animation: fadeIn 1s ease forwards, slideIn 0.5s ease-out;
+            opacity: 0;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); }
+            to { transform: translateY(0); }
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: var(--text-color);
+            font-size: 0.8em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 95%;
+            padding: 12px;
+            margin: 10px auto;
+            border-radius: 5px;
+            border: 2px solid var(--input-border-color);
+            font-size: 1em;
+            transition: all 0.3s ease;
+            display: block;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            backdrop-filter: blur(5px);
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--input-focus-color);
+            box-shadow: 0 0 5px rgba(244, 81, 30, 0.3);
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 80%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 2px 2px 5px var(--box-shadow-color);
+        }
+
+        button:hover {
+            background-color: #00897b;
+            transform: scale(1.05);
+            box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+        }
+
+        #risultato {
+            margin-top: 30px;
+            padding: 15px;
+            border: 3px solid var(--secondary-color);
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 1em;
+            line-height: 1.5em;
+            box-shadow: 0 4px 10px var(--box-shadow-color);
+            animation: fadeIn 1s ease forwards, slideIn 0.5s ease-out;
+            opacity: 0;
+            backdrop-filter: blur(10px);
+        }
+
+        #risultato p {
+            margin: 10px 0;
+            font-weight: bold;
+            color: var(--input-focus-color);
+        }
+
+        #risultato span {
+            color: var(--text-color);
+            font-weight: normal;
+        }
+
+        #tombolinoCheck {
+            margin-left: 5px;
+        }
+
+        .tombolino-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        #toggleDarkMode {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            z-index: 1000;
+            box-shadow: 2px 2px 5px var(--box-shadow-color);
+            display: flex;
+            align-items: center;
+        }
+
+        #toggleDarkMode:hover {
+            background-color: #b28900;
+        }
+
+        .material-symbols-outlined {
+            font-size: 1.5em;
+            margin-right: 0;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <h1>Calcolatore Premi Tombola</h1>
+    <button id="toggleDarkMode">
+        <span class="material-symbols-outlined">contrast</span>
+    </button>
+    <div id="inputDati">
+        <label for="prezzoCartella">Prezzo Cartella (in centesimi):</label>
+        <input type="number" id="prezzoCartella" placeholder="Es: 250">
+        <label for="numeroCartelle">Numero Cartelle Vendute:</label>
+        <input type="number" id="numeroCartelle" placeholder="Es: 100">
+        <div class="tombolino-container">
+            <label for="tombolinoCheck">Includi Tombolino:</label>
+            <input type="checkbox" id="tombolinoCheck">
+        </div>
+        <button onclick="calcolaPremi()">Calcola Premi</button>
+    </div>
+    <div id="risultato"></div>
+    <script>
+        function arrotondaA10Centesimi(valore) {
+            return Math.round(valore * 10) / 10;
+        }
+
+        function distribuisciDifferenza(premiCalcolati, differenza) {
+            differenza = Math.round(differenza * 100);
+            let nomiPremi = Object.keys(premiCalcolati);
+
+            while (differenza !== 0) {
+                for (let premio of nomiPremi) {
+                    if (differenza === 0) break;
+                    let adjust = differenza > 0 ? 10 : -10;
+                    premiCalcolati[premio] += adjust / 100;
+                    differenza -= adjust;
+                }
+            }
+        }
+
+        function calcolaPremi() {
+            let prezzoCartella = parseInt(document.getElementById('prezzoCartella').value);
+            let numeroCartelle = parseInt(document.getElementById('numeroCartelle').value);
+            let includiTombolino = document.getElementById('tombolinoCheck').checked;
+            let risultato = document.getElementById('risultato');
+
+            if (isNaN(prezzoCartella) || prezzoCartella <= 0) {
+                risultato.innerHTML = "Inserisci un prezzo cartella valido.";
+                return;
+            }
+            if (isNaN(numeroCartelle) || numeroCartelle <= 0) {
+                risultato.innerHTML = "Inserisci un numero di cartelle valido.";
+                return;
+            }
+
+            let valoreTotale = (prezzoCartella / 100) * numeroCartelle;
+
+            let premi = {
+                tombola: 0.40,
+                cinquina: 0.25,
+                quaterna: 0.17,
+                terno: 0.11,
+                ambo: 0.07
+            };
+
+            if (includiTombolino) {
+                premi.tombola -= 0.025;
+                premi.cinquina -= 0.025;
+                premi.tombolino = 0.05;
+            }
+
+            let premiCalcolati = {};
+            let sommaPremi = 0;
+
+            for (let premio in premi) {
+                let valore = arrotondaA10Centesimi(valoreTotale * premi[premio]);
+                premiCalcolati[premio] = valore;
+                sommaPremi += valore;
+            }
+
+            let differenza = valoreTotale - sommaPremi;
+            if (differenza !== 0) {
+                distribuisciDifferenza(premiCalcolati, differenza);
+            }
+
+            risultato.innerHTML = `<p>Tombola: <span>€${premiCalcolati.tombola.toFixed(2)}</span></p>` +
+                `<p>Cinquina: <span>€${premiCalcolati.cinquina.toFixed(2)}</span></p>` +
+                `<p>Quaterna: <span>€${premiCalcolati.quaterna.toFixed(2)}</span></p>` +
+                `<p>Terno: <span>€${premiCalcolati.terno.toFixed(2)}</span></p>` +
+                `<p>Ambo: <span>€${premiCalcolati.ambo.toFixed(2)}</span></p>`;
+            if (includiTombolino) {
+                risultato.innerHTML += `<p>Tombolino: <span>€${premiCalcolati.tombolino.toFixed(2)}</span></p>`;
+            }
+        }
+
+        // Dark mode support
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+            document.body.classList.add('dark-mode');
+        }
+
+        const toggleDarkModeButton = document.getElementById('toggleDarkMode');
+        toggleDarkModeButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+    </script>
+</body>
+</html>
